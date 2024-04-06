@@ -52,7 +52,7 @@ if (gitInstalled) {
         console.log(chalk.bold('2. bun install'));
         console.log(chalk.bold('3. bun dev'));
 
-        console.log(chalk.bold('\n⚡️ Read the documentation at https://probun.dev/docs'));
+        console.log(chalk.bold('\n⚡️ Read the documentation at https://probun.p3pr.co'));
 
         console.log(chalk.bold('\nHappy Coding! 🧑‍💻'));
 
