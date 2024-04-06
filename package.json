@@ -1,9 +1,16 @@
 {
   "name": "create-probun",
   "module": "src/index.ts",
+  "version": "0.1.1",
+  "description": "Create a new probun project",
+  "main": "lib/index.js",
+  "bin": "lib/index.js",
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest"
+  },
+  "scripts": {
+    "build": "bun build.ts"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

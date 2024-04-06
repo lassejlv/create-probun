@@ -3,6 +3,20 @@
 import chalk from 'chalk';
 import ora from 'ora';
 import child_process from 'child_process';
+import fs from 'fs';
+
+let projectName;
+
+if (process.argv.length > 2) {
+    projectName = process.argv[2];
+
+    if (fs.existsSync(projectName)) {
+        console.log(chalk.red('A directory with the same name already exists'));
+        process.exit(1);
+    }
+}
+
+
 
 const gitInstallSpinner = ora(chalk.bold('Checking if git is installed...')).start();
 
@@ -25,9 +39,14 @@ if (gitInstalled) {
     const loadingSpinner = ora(chalk.bold("Setting up your project...")).start();
 
     try {
-        child_process.execSync('git clone https://github.com/benjamint08/probun-example my-probun-project', { stdio: 'ignore' });
+        child_process.execSync(`git clone https://github.com/benjamint08/probun-example ${projectName ? projectName : "probun-app"}`, { stdio: 'ignore' });
         loadingSpinner.succeed('Project setup complete');
 
+        const installSpinner = ora(chalk.bold('Installing dependencies...')).start();
+        child_process.execSync(`cd ${projectName ? projectName : "probun-app"} && bun install`, { stdio: 'ignore' });
+
+        installSpinner.succeed('Dependencies installed');
+        
         console.log(chalk.bold('\n\nNext steps:'));
         console.log(chalk.bold('1. cd my-probun-project'));
         console.log(chalk.bold('2. bun install'));
@@ -39,7 +58,7 @@ if (gitInstalled) {
 
         process.exit(0);
 
-    } catch (error) {
+    } catch (error: any) {      
         loadingSpinner.fail('Failed to setup project');
         process.exit(1);
     }
