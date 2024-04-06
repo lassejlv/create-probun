@@ -4,6 +4,8 @@ import chalk from 'chalk';
 import ora from 'ora';
 import child_process from 'child_process';
 import fs from 'fs';
+// @ts-ignore: No types available
+import figlet from 'figlet';
 
 let projectName;
 
@@ -16,15 +18,28 @@ if (process.argv.length > 2) {
     }
 }
 
+function wait(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
+figlet('Probun', (err: any, data: any) => {
+    if (err) {
+        console.error("Something went wrong...");
+        console.dir(err);
+        return;
+      }
+
+     console.log(`\n\n${chalk.bold(data)}\n\n`);
+})
+
+wait(1000);
 
 const gitInstallSpinner = ora(chalk.bold('Checking if git is installed...')).start();
 
 let gitInstalled = false;
 
 
-// Wait for 2 seconds before exiting
-new Promise((resolve) => setTimeout(resolve, 2000))
+wait(1000);
 
 try {
     child_process.execSync('git --version', { stdio: 'ignore' });
@@ -48,9 +63,8 @@ if (gitInstalled) {
         installSpinner.succeed('Dependencies installed');
         
         console.log(chalk.bold('\n\nNext steps:'));
-        console.log(chalk.bold('1. cd my-probun-project'));
-        console.log(chalk.bold('2. bun install'));
-        console.log(chalk.bold('3. bun dev'));
+        console.log(chalk.bold(`1. cd ${projectName ? projectName : "probun-app"}`));
+        console.log(chalk.bold('2. bun dev'));
 
         console.log(chalk.bold('\n⚡️ Read the documentation at https://probun.p3pr.co'));
 
