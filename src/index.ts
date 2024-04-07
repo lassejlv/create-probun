@@ -66,7 +66,7 @@ if (gitInstalled) {
         console.log(chalk.bold(`1. cd ${projectName ? projectName : "probun-app"}`));
         console.log(chalk.bold('2. bun dev'));
 
-        console.log(chalk.bold('\n⚡️ Read the documentation at https://probun.p3pr.co'));
+        console.log(chalk.bold('\n⚡️ Read the documentation at https://probun.dev'));
 
         console.log(chalk.bold('\nHappy Coding! 🧑‍💻'));
 
