@@ -3,20 +3,56 @@
 import chalk from 'chalk';
 import ora from 'ora';
 import child_process from 'child_process';
-import fs from 'fs';
 // @ts-ignore: No types available
 import figlet from 'figlet';
+import fs from 'fs';
 
-let projectName;
+let projectName = "my-probun-app";
+let templateName: string | undefined;
 
-if (process.argv.length > 2) {
-    projectName = process.argv[2];
-
-    if (fs.existsSync(projectName)) {
-        console.log(chalk.red('A directory with the same name already exists'));
-        process.exit(1);
+const templates: { name: string, url: string }[] = [
+    {
+        name: 'default',
+        url: "https://github.com/benjamint08/probun-example",
+    },
+    {
+        name: "frogdb",
+        url: "https://github.com/lassejlv/probun-template-frogdb"
     }
+]
+
+
+// Everything before --template = <template-name> is the project name
+if (process.argv.length < 3) {
+    console.log(chalk.red('Please provide a project name'));
+    process.exit(1);
 }
+
+projectName = process.argv[2];
+// Find --template = <template-name>
+const args = process.argv.slice(2);
+const templateIndex = args.findIndex(arg => arg === '--template');
+if (templateIndex !== -1) {
+    templateName = args[templateIndex + 1];
+}
+
+if (!templateName) {
+    templateName = "default";
+} else if (templateName === 'frogdb') {
+    templateName = 'frogdb';
+} else if (!templates.find(t => t.name === templateName)) {
+    console.log(chalk.red(`Template ${templateName} not found`));
+    process.exit(1);
+}
+
+
+// Checks if the directory already exists
+if (fs.existsSync(projectName)) {
+    console.log(chalk.red('Directory already exists'));
+    process.exit(1);
+}
+
+
 
 function wait(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -54,7 +90,9 @@ if (gitInstalled) {
     const loadingSpinner = ora(chalk.bold("Setting up your project...")).start();
 
     try {
-        child_process.execSync(`git clone https://github.com/benjamint08/probun-example ${projectName ? projectName : "probun-app"}`, { stdio: 'ignore' });
+       const gitUrl = templates.find(t => t.name === templateName)?.url;
+        
+        child_process.execSync(`git clone ${gitUrl} ${projectName ? projectName : "probun-app"}`, { stdio: 'ignore' });
         loadingSpinner.succeed('Project setup complete');
 
         const installSpinner = ora(chalk.bold('Installing dependencies...')).start();
@@ -63,17 +101,15 @@ if (gitInstalled) {
         installSpinner.succeed('Dependencies installed');
         
         console.log(chalk.bold('\n\nNext steps:'));
-        console.log(chalk.bold(`1. cd ${projectName ? projectName : "probun-app"}`));
-        console.log(chalk.bold('2. bun dev'));
+        console.log(chalk.green(`1. cd ${projectName ? projectName : "probun-app"}`));
+        console.log(chalk.green('2. bun dev'));
+        console.log(chalk.green('3. Used template: ' + templateName));
 
-        console.log(chalk.bold('\n⚡️ Read the documentation at https://probun.dev'));
-
-        console.log(chalk.bold('\nHappy Coding! 🧑‍💻'));
-
+        console.log(chalk.bold(`\n${chalk.yellow("⚡️")}Read the documentation at https://probun.dev`));
         process.exit(0);
 
-    } catch (error: any) {      
-        loadingSpinner.fail('Failed to setup project');
+    } catch (error: any) {          
+        loadingSpinner.fail('Failed to setup project, did you provide valid syntax in the command?');
         process.exit(1);
     }
 }
