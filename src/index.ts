@@ -13,11 +13,15 @@ let templateName: string | undefined;
 const templates: { name: string, url: string }[] = [
     {
         name: 'default',
-        url: "https://github.com/benjamint08/probun-example",
+        url: "https://github.com/lassejlv/probun-clean-template",
     },
     {
         name: "frogdb",
         url: "https://github.com/lassejlv/probun-template-frogdb"
+    },
+    {
+        name: "advanced",
+        url: "https://github.com/benjamint08/probun-example"
     }
 ]
 
