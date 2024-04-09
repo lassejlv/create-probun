@@ -1,15 +1,11 @@
 # create-probun
 
-To install dependencies:
+## Usage
 
 ```bash
-bun install
+$ bunx create-probun@latest <project-name> [options]
 ```
 
-To run:
+## Read the Docs
 
-```bash
-bun run src/index.ts
-```
-
-This project was created using `bun init` in bun v1.1.2. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+https://probun.dev
