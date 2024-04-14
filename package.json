@@ -1,7 +1,7 @@
 {
   "name": "create-probun",
   "module": "src/index.ts",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Create a new probun project",
   "main": "lib/index.js",
   "bin": "lib/index.js",
