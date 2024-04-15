@@ -116,7 +116,7 @@ if (gitInstalled) {
       const prismaSpinner = ora("Setting up Prisma...").start();
 
       // prettier-ignore
-      await $`cd ${ projectName ? projectName : "probun-app" } && bunx prisma init --datasource-provider=sqlite`;
+      await $`cd ${ projectName ? projectName : "probun-app" } && bunx prisma init --datasource-provider=sqlite`.quiet();
 
       prismaSpinner.succeed("Prisma setup complete");
     }
