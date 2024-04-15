@@ -123,15 +123,15 @@ if (gitInstalled) {
 
     console.log(chalk.bold("\n\nNext steps:"));
     console.log(
-      chalk.green(`1. cd ${projectName ? projectName : "probun-app"}`)
+      chalk.gray(`1. cd ${projectName ? projectName : "probun-app"}`)
     );
-    console.log(chalk.green("2. bun dev"));
+    console.log(chalk.grey("2. bun dev"));
 
-    console.log(chalk.green("3. Used template: " + templateName));
+    console.log(chalk.grey("3. Used template: " + templateName));
 
     if (withPrisma) {
       console.log(
-        chalk.green(
+        chalk.grey(
           '4. Prisma setup complete, run "bunx prisma db push" to get started with your database'
         )
       );
@@ -139,9 +139,14 @@ if (gitInstalled) {
 
     console.log(
       chalk.bold(
-        `\n${chalk.yellow("⚡️")}Read the documentation at https://probun.dev`
+        `\n${chalk.yellow(
+          "⚡️"
+        )}Read the documentation at ${chalk.underline.blue(
+          `https://probun.dev`
+        )}`
       )
     );
+
     process.exit(0);
   } catch (error: any) {
     console.log(error);
