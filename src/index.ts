@@ -116,7 +116,29 @@ if (gitInstalled) {
       const prismaSpinner = ora("Setting up Prisma...").start();
 
       // prettier-ignore
-      await $`cd ${ projectName ? projectName : "probun-app" } && bunx prisma init --datasource-provider=sqlite`.quiet();
+      await $`cd ${projectName ? projectName : "probun-app"} && bunx prisma init --datasource-provider=sqlite`.quiet();
+
+      // prettier-ignore
+      await $`cd ${projectName ? projectName : "probun-app"}/src/utils && touch db.ts`.quiet();
+
+      const prismaConfig = `import { PrismaClient } from "@prisma/client";
+
+interface CustomNodeJsGlobal {
+    db: PrismaClient;
+}
+      
+declare const global: CustomNodeJsGlobal;
+      
+const db = global.db || new PrismaClient();
+      
+if (process.env.NODE_ENV === "development") global.db = db;
+      
+export default db;`;
+
+      await Bun.write(
+        `${projectName ? projectName : "probun-app"}/src/utils/db.ts`,
+        prismaConfig
+      );
 
       prismaSpinner.succeed("Prisma setup complete");
     }
