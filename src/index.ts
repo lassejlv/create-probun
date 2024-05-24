@@ -3,8 +3,6 @@
 import chalk from "chalk";
 import ora from "ora";
 import child_process from "child_process";
-// @ts-ignore: No types available
-import figlet from "figlet";
 import fs from "fs";
 import { $ } from "bun";
 
@@ -61,21 +59,9 @@ function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-figlet("Probun", (err: any, data: any) => {
-  if (err) {
-    console.error("Something went wrong...");
-    console.dir(err);
-    return;
-  }
+console.log(`\nWelcome to ${chalk.bold("create-probun")}, let get you started...\n`);
 
-  console.log(`\n\n${chalk.bold(data)}\n\n`);
-});
-
-wait(1000);
-
-const gitInstallSpinner = ora(
-  chalk.bold("Checking if git is installed...")
-).start();
+const gitInstallSpinner = ora(chalk.bold("Checking if git is installed...")).start();
 
 let gitInstalled = false;
 
@@ -96,19 +82,11 @@ if (gitInstalled) {
   try {
     const gitUrl = templates.find((t) => t.name === templateName)?.url;
 
-    child_process.execSync(
-      `git clone ${gitUrl} ${projectName ? projectName : "probun-app"}`,
-      { stdio: "ignore" }
-    );
+    child_process.execSync(`git clone ${gitUrl} ${projectName ? projectName : "probun-app"}`, { stdio: "ignore" });
     loadingSpinner.succeed("Project setup complete");
 
-    const installSpinner = ora(
-      chalk.bold("Installing dependencies...")
-    ).start();
-    child_process.execSync(
-      `cd ${projectName ? projectName : "probun-app"} && bun install`,
-      { stdio: "ignore" }
-    );
+    const installSpinner = ora(chalk.bold("Installing dependencies...")).start();
+    child_process.execSync(`cd ${projectName ? projectName : "probun-app"} && bun install`, { stdio: "ignore" });
 
     installSpinner.succeed("Dependencies installed");
 
@@ -135,47 +113,30 @@ if (process.env.NODE_ENV === "development") global.db = db;
       
 export default db;`;
 
-      await Bun.write(
-        `${projectName ? projectName : "probun-app"}/src/utils/db.ts`,
-        prismaConfig
-      );
+      await Bun.write(`${projectName ? projectName : "probun-app"}/src/utils/db.ts`, prismaConfig);
 
       prismaSpinner.succeed("Prisma setup complete");
     }
 
     console.log(chalk.bold("\n\nNext steps:"));
-    console.log(
-      chalk.gray(`1. cd ${projectName ? projectName : "probun-app"}`)
-    );
+    console.log(chalk.gray(`1. cd ${projectName ? projectName : "probun-app"}`));
     console.log(chalk.grey("2. bun dev"));
 
     console.log(chalk.grey("3. Used template: " + templateName));
 
     if (withPrisma) {
-      console.log(
-        chalk.grey(
-          '4. Prisma setup complete, run "bunx prisma db push" to get started with your database'
-        )
-      );
+      console.log(chalk.grey('4. Prisma setup complete, run "bunx prisma db push" to get started with your database'));
     }
 
     console.log(
-      chalk.bold(
-        `\n${chalk.yellow(
-          "⚡️"
-        )}Read the documentation at ${chalk.underline.blue(
-          `https://probun.dev`
-        )}`
-      )
+      chalk.bold(`\n${chalk.yellow("⚡️")}Read the documentation at ${chalk.underline.blue(`https://probun.dev`)}`)
     );
 
     process.exit(0);
   } catch (error: any) {
     console.log(error);
 
-    loadingSpinner.fail(
-      "Failed to setup project, did you provide valid syntax in the command?"
-    );
+    loadingSpinner.fail("Failed to setup project, did you provide valid syntax in the command?");
     process.exit(1);
   }
 }
